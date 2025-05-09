@@ -1,4 +1,2 @@
 # api-sandbox
 
-chanignigninigni
-alkalkdfslkdjfk
