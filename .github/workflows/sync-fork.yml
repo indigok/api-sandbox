@@ -37,3 +37,5 @@ jobs:
         run: |  
           gh repo set-default indigok/api-sandbox
           gh pr create -B master -H weekly-sync-branch --title 'Sync Fork with Upstream' --body 'Weekly Cron. Created by GitHub Actions.
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
