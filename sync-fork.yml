@@ -1,0 +1,39 @@
+name: Sync Fork with Upstream
+on:
+  schedule:
+    - cron: '0 0 * * 1'  # Runs at midnight UTC every Monday
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Forked Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Fetch Upstream Remote
+        run: |
+          git remote add upstream https://github.com/puppiesandicecream/api-sandbox.git
+          git fetch upstream
+
+      - name: Set Git Config
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Create and Push Branch 
+        run: |          
+          git checkout -B weekly-sync-branch
+          git merge upstream/main --no-commit
+          git reset -- ./.github
+          git commit -m "Merge in upstream/main"
+          git commit --allow-empty -m "Empty commit to open PR"
+          git push
+
+      - name: Open PR 
+        run: |  
+          gh repo set-default indigok/api-sandbox
+          gh pr create -B main -H weekly-sync-branch --title 'Sync Fork with Upstream' --body 'Weekly Cron. Created by GitHub Actions.
