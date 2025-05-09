@@ -26,16 +26,16 @@ jobs:
 
       - name: Create and Push Branch 
         run: |          
-          git checkout -B weekly-sync-branch
+          git checkout -b weekly-sync-branch-${{ github.run_id }}
           git merge upstream/master --no-commit
           git reset -- ./.github
           git commit -m "Merge in upstream/main"
           git commit --allow-empty -m "Empty commit to open PR"
-          git push --set-upstream origin weekly-sync-branch
+          git push --set-upstream origin weekly-sync-branch-${{ github.run_id }}
 
       - name: Open PR 
         run: |  
           gh repo set-default indigok/api-sandbox
-          gh pr create -B master -H weekly-sync-branch --title 'Sync Fork with Upstream' --body 'Weekly Cron. Created by GitHub Actions.
+          gh pr create -B master -H weekly-sync-branch-${{ github.run_id }} --title 'Sync Fork with Upstream' --body 'Weekly Cron. Created by GitHub Actions.
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
