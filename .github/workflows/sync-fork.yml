@@ -31,7 +31,7 @@ jobs:
           git reset -- ./.github
           git commit -m "Merge in upstream/main"
           git commit --allow-empty -m "Empty commit to open PR"
-          git push
+          git push --set-upstream origin weekly-sync-branch
 
       - name: Open PR 
         run: |  
